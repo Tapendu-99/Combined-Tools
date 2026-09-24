@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Daily Utility Tools</title>
+<style>
+:root{
+  --color-primary:#2f5fe0; --color-primary-hover:#2650c2;
+  --color-bg:#f5f6f9; --color-surface:#ffffff; --color-surface-2:#eef0f5;
+  --color-text:#161a23; --color-muted:#5c6270; --color-border:#e2e5ec;
+  --radius-sm:8px; --radius-md:14px; --radius-lg:20px;
+  --shadow:0 1px 3px rgba(20,24,40,.06),0 8px 24px rgba(20,24,40,.05);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --color-bg:#0f1117; --color-surface:#171a23; --color-surface-2:#1e2230;
+    --color-text:#eceef3; --color-muted:#9298a8; --color-border:#2a2e3d;
+    --shadow:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --color-bg:#0f1117; --color-surface:#171a23; --color-surface-2:#1e2230;
+  --color-text:#eceef3; --color-muted:#9298a8; --color-border:#2a2e3d;
+  --shadow:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*{box-sizing:border-box}
+body{
+  margin:0; height:100%; background:var(--color-bg); color:var(--color-text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Arial,sans-serif;
+  display:flex; flex-direction:column;
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+header{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 20px; padding-top:calc(14px + env(safe-area-inset-top,0px));
+  border-bottom:1px solid var(--color-border); background:var(--color-surface);
+  position:sticky; top:0; z-index:20;
+}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.05rem}
+.brand .logo{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--color-primary),#7c5cff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.85rem;font-weight:800}
+.icon-btn{border:1px solid var(--color-border);background:var(--color-surface-2);color:var(--color-text);width:38px;height:38px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s}
+.icon-btn:hover{background:var(--color-border)}
+.icon-btn:focus-visible,.nav-item:focus-visible,.card a:focus-visible{outline:2px solid var(--color-primary);outline-offset:2px}
+
+.shell{flex:1;display:flex;min-height:0}
+aside.sidebar{
+  width:250px; flex-shrink:0; background:var(--color-surface); border-right:1px solid var(--color-border);
+  padding:16px 12px; display:flex; flex-direction:column; gap:4px; overflow-y:auto;
+}
+.nav-item{
+  display:flex; gap:12px; align-items:flex-start; padding:11px 12px; border-radius:var(--radius-sm);
+  color:var(--color-text); text-decoration:none; cursor:pointer; border:1px solid transparent; background:none; width:100%; text-align:left; font-family:inherit;
+}
+.nav-item:hover{background:var(--color-surface-2)}
+.nav-item.active{background:var(--color-surface-2);border-color:var(--color-border)}
+.nav-item.active .nav-ic{background:var(--color-primary);color:#fff}
+.nav-ic{width:34px;height:34px;border-radius:9px;background:var(--color-surface-2);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--color-primary)}
+.nav-txt strong{display:block;font-size:.92rem}
+.nav-txt span{display:block;font-size:.76rem;color:var(--color-muted);margin-top:1px}
+
+main{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden}
+.home{padding:32px clamp(16px,4vw,40px);overflow-y:auto}
+.home h1{margin:0 0 6px;font-size:clamp(1.4rem,3vw,1.9rem)}
+.home p.lead{color:var(--color-muted);margin:0 0 26px;max-width:60ch}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card .nav-ic{width:42px;height:42px;border-radius:11px}
+.card h3{margin:2px 0 0;font-size:1.05rem}
+.card p{margin:0;color:var(--color-muted);font-size:.88rem;flex:1}
+.card a{color:var(--color-primary);text-decoration:none;font-weight:600;font-size:.9rem;display:inline-flex;align-items:center;gap:4px}
+
+.tool-view{flex:1;display:flex;flex-direction:column;min-height:0}
+.tool-header{padding:12px 20px;border-bottom:1px solid var(--color-border);background:var(--color-surface);display:flex;align-items:center;gap:10px}
+.tool-header h2{margin:0;font-size:1rem}
+.tool-header a{margin-left:auto;font-size:.8rem;color:var(--color-muted);text-decoration:none}
+.frame-wrap{flex:1;position:relative;min-height:0}
+iframe{width:100%;height:100%;border:0;display:block;background:var(--color-surface)}
+.state{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:var(--color-bg);text-align:center;padding:20px}
+.spinner{width:30px;height:30px;border:3px solid var(--color-border);border-top-color:var(--color-primary);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.state button{background:var(--color-primary);color:#fff;border:0;padding:9px 16px;border-radius:var(--radius-sm);cursor:pointer;font-weight:600}
+.hidden{display:none!important}
+
+nav.mobile-nav{
+  display:none; border-top:1px solid var(--color-border); background:var(--color-surface);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  position:sticky;bottom:0;z-index:20;
+}
+nav.mobile-nav .row{display:flex}
+nav.mobile-nav button{flex:1;background:none;border:0;color:var(--color-muted);display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 4px 8px;font-size:.68rem;font-family:inherit;cursor:pointer}
+nav.mobile-nav button.active{color:var(--color-primary)}
+nav.mobile-nav .nav-ic{width:26px;height:26px;border-radius:8px;background:transparent;color:inherit}
+
+@media (max-width:860px){
+  aside.sidebar{display:none}
+  nav.mobile-nav{display:block}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><span class="logo">DU</span><span>Daily Utility Tools</span></div>
+  <button class="icon-btn" id="themeToggle" aria-label="Toggle dark mode" title="Toggle theme">🌓</button>
+</header>
+
+<div class="shell">
+  <aside class="sidebar" id="sidebar"></aside>
+  <main id="main">
+    <section class="home" id="homeView">
+      <h1>Your Toolkit</h1>
+      <p class="lead">A collection of browser-based utilities to make your day-to-day training and reporting work faster.</p>
+      <div class="grid" id="homeGrid"></div>
+      <p style="margin-top:32px;color:var(--color-muted);font-size:.82rem">Created and maintained by Tapendu Mridha @Sep, 2026</p>
+    </section>
+    <section class="tool-view hidden" id="toolView">
+      <div class="tool-header">
+        <h2 id="toolTitle"></h2>
+        <a id="toolExternal" target="_blank" rel="noopener">Open in new tab ↗</a>
+      </div>
+      <div class="frame-wrap">
+        <div class="state" id="loadingState"><div class="spinner"></div><span>Loading tool…</span></div>
+        <div class="state hidden" id="errorState">
+          <strong>Unable to load this tool.</strong>
+          <span style="color:var(--color-muted);font-size:.85rem">Please try again.</span>
+          <button id="retryBtn">Retry</button>
+        </div>
+        <iframe id="toolFrame" title="Tool" class="hidden"></iframe>
+      </div>
+    </section>
+  </main>
+</div>
+
+<nav class="mobile-nav"><div class="row" id="mobileNav"></div></nav>
+
+<script>
+const TOOLS = [
+  {id:'training', name:'Training Confirmation', short:'Confirmation emails', desc:'Generate training confirmation acknowledgement emails from session details.', url:'https://tapendu-99.github.io/Training-Confirmation-Generator/', icon:'✉'},
+  {id:'ticket', name:'Ticket Response', short:'Response templates', desc:'Create email response templates for different support ticket scenarios.', url:'https://tapendu-99.github.io/Ticket-Response/', icon:'💬'},
+  {id:'attendance', name:'Attendance Converter', short:'TL / Manager tool', desc:'Convert a date-wise shift attendance sheet into P/A marked Excel output.', url:'https://tapendu-99.github.io/Attendance-Converter/', icon:'📋'}
+];
+
+const $ = s => document.querySelector(s);
+const sidebar = $('#sidebar'), mobileNav = $('#mobileNav'), homeGrid = $('#homeGrid');
+
+function navItem(t, cls){
+  const el = document.createElement(cls==='card'?'div':'button');
+  el.className = cls==='card' ? 'card' : 'nav-item';
+  if(cls==='card'){
+    el.innerHTML = `<div class="nav-ic">${t.icon}</div><h3>${t.name}</h3><p>${t.desc}</p><a href="#/${t.id}">Open Tool →</a>`;
+    el.querySelector('a').addEventListener('click', e=>{e.preventDefault(); location.hash = '#/'+t.id;});
+  } else {
+    el.innerHTML = `<span class="nav-ic">${t.icon}</span><span class="nav-txt"><strong>${t.name}</strong><span>${t.short}</span></span>`;
+    el.addEventListener('click', ()=> location.hash = '#/'+t.id);
+  }
+  return el;
+}
+
+// sidebar (home + tools)
+const homeNav = document.createElement('button');
+homeNav.className='nav-item'; homeNav.id='nav-home';
+homeNav.innerHTML = `<span class="nav-ic">⌂</span><span class="nav-txt"><strong>Home</strong><span>Overview</span></span>`;
+homeNav.addEventListener('click', ()=> location.hash = '#/');
+sidebar.appendChild(homeNav);
+TOOLS.forEach(t=> sidebar.appendChild(navItem(t,'nav-item')));
+const sideFooter = document.createElement('p');
+sideFooter.style.cssText = 'margin-top:auto;padding:10px 8px 4px;color:var(--color-muted);font-size:.7rem;line-height:1.4';
+sideFooter.textContent = 'Created and maintained by Tapendu Mridha @Sep, 2026';
+sidebar.appendChild(sideFooter);
+
+// home cards
+TOOLS.forEach(t=> homeGrid.appendChild(navItem(t,'card')));
+
+// mobile bottom nav
+function mobileBtn(id, icon, label){
+  const b=document.createElement('button');
+  b.id='m-'+id;
+  b.innerHTML = `<span class="nav-ic">${icon}</span><span>${label}</span>`;
+  b.addEventListener('click', ()=> location.hash = id==='home' ? '#/' : '#/'+id);
+  return b;
+}
+mobileNav.appendChild(mobileBtn('home','⌂','Home'));
+TOOLS.forEach(t=> mobileNav.appendChild(mobileBtn(t.id, t.icon, t.short.split(' ')[0])));
+
+function setActive(id){
+  document.querySelectorAll('aside .nav-item, nav.mobile-nav button').forEach(el=>el.classList.remove('active'));
+  const sideMatch = id==='' ? homeNav : [...sidebar.querySelectorAll('.nav-item')].find(el=>el.textContent.includes(TOOLS.find(t=>t.id===id)?.name||'§none'));
+  if(sideMatch) sideMatch.classList.add('active');
+  const mBtn = document.getElementById('m-'+(id||'home'));
+  if(mBtn) mBtn.classList.add('active');
+}
+
+const homeView=$('#homeView'), toolView=$('#toolView'), toolFrame=$('#toolFrame');
+const loadingState=$('#loadingState'), errorState=$('#errorState'), toolTitle=$('#toolTitle'), toolExternal=$('#toolExternal');
+let loadTimer=null;
+
+function loadTool(t){
+  homeView.classList.add('hidden'); toolView.classList.remove('hidden');
+  toolTitle.textContent = t.name; toolExternal.href = t.url;
+  loadingState.classList.remove('hidden'); errorState.classList.add('hidden'); toolFrame.classList.add('hidden');
+  toolFrame.src = t.url;
+  clearTimeout(loadTimer);
+  loadTimer = setTimeout(()=>{
+    if(loadingState.classList.contains('hidden')) return;
+    loadingState.classList.add('hidden'); errorState.classList.remove('hidden');
+  }, 9000);
+}
+toolFrame.addEventListener('load', ()=>{
+  clearTimeout(loadTimer);
+  loadingState.classList.add('hidden'); errorState.classList.add('hidden'); toolFrame.classList.remove('hidden');
+});
+$('#retryBtn').addEventListener('click', ()=>{
+  const id = location.hash.replace('#/','');
+  const t = TOOLS.find(x=>x.id===id);
+  if(t) loadTool(t);
+});
+
+function route(){
+  const id = location.hash.replace('#/','');
+  const t = TOOLS.find(x=>x.id===id);
+  if(!t){
+    toolView.classList.add('hidden'); homeView.classList.remove('hidden');
+    toolFrame.src='about:blank';
+    setActive('');
+  } else {
+    setActive(id);
+    loadTool(t);
+  }
+}
+window.addEventListener('hashchange', route);
+route();
+
+// theme
+const root = document.documentElement;
+const saved = localStorage.getItem('pt-theme');
+if(saved) root.setAttribute('data-theme', saved);
+$('#themeToggle').addEventListener('click', ()=>{
+  const current = root.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+  const next = current==='dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme', next);
+  localStorage.setItem('pt-theme', next);
+});
+</script>
+</body>
+</html>
